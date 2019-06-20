@@ -55,19 +55,19 @@ function getPhotos(expressions, names, min, max) {
 
 // Функция для получения комментариев к фотографии
 function getCommentaries(expressions, names) {
-  var massive = [];
+  var comments = [];
   for (var j = 0; j < getIndex(QUANTITY); j++) {
-    massive[j] = {};
-    massive[j].avatar = 'img/avatar-' + getRandomInt(1, 6) + '.svg';
-    massive[j].message = expressions[getIndex(expressions.length)];
-    massive[j].name = names[getIndex(names.length)];
+    comments[j] = {};
+    comments[j].avatar = 'img/avatar-' + getRandomInt(1, 6) + '.svg';
+    comments[j].message = expressions[getIndex(expressions.length)];
+    comments[j].name = names[getIndex(names.length)];
   }
 
-  return massive;
+  return comments;
 }
 
 // Функция для создания DOM-элемента
-function createPhotos(photo, parentElement) {
+function getPhoto(photo, parentElement) {
   // Определяем шаблон, в который будем записывать данные
   var photoElement = parentElement.content.querySelector('.picture').cloneNode(true);
 
@@ -84,11 +84,10 @@ function getDomElements() {
   var fragment = document.createDocumentFragment();
 
   for (var i = 0; i < QUANTITY; i++) {
-    fragment.appendChild(createPhotos(photo[i], photoTemplate));
+    fragment.appendChild(getPhoto(photo[i], photoTemplate));
   }
 
   return fragment;
 }
 
-var photosList = document.querySelector('.pictures');
-photosList.appendChild(getDomElements());
+document.querySelector('.pictures').appendChild(getDomElements());
