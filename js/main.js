@@ -4,6 +4,12 @@
 var QUANTITY = 25;
 var MINMIMUM_LIKES = 15;
 var MAXIMUM_LIKES = 100;
+var MINIMUM_SCALE = 25;
+var MAXIMUM_SCALE = 100;
+var STEP_SCALE = 25;
+var PERCENT_SCALE = 100;
+
+var ESC_KEY = 27;
 var EXPRESSIONS = [
   'Всё отлично!',
   'В целом всё неплохо. Но не всё.',
@@ -91,3 +97,70 @@ function getDomElements() {
 }
 
 document.querySelector('.pictures').appendChild(getDomElements());
+
+// Модуль 4, задание 2
+var uploadPhoto = document.querySelector('#upload-file');
+var uploadPhotoSetting = document.querySelector('.img-upload__overlay');
+var uploadCancel = document.querySelector('#upload-cancel');
+var uploadPreview = document.querySelector('.img-upload__preview');
+
+var uploadScale = document.querySelector('.img-upload__scale');
+var uploadScaleReduction = uploadScale.querySelector('.scale__control--smaller');
+var uploadScaleIncrease = uploadScale.querySelector('.scale__control--bigger');
+
+//  var uploadPin = document.querySelector('.effect-level__pin');
+
+function onPopupEscPress(evt) {
+  if (evt.keyCode === ESC_KEY) {
+    closePopup();
+  }
+}
+
+// Функция для сброса на начальное значение
+// Сделано именно функцией, потому что eslint ругался на выражение uploadPhoto.reset
+function onResetToDefault(func) {
+  return func.reset;
+}
+
+function openPopup() {
+  uploadPhotoSetting.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+
+  // Присваиваем стандартное значение в 100% и накладываем на кнопки слушателей
+  uploadScale.querySelector('.scale__control--value').value = '100%';
+  uploadScaleReduction.addEventListener('click', onRedictionPhoto);
+  uploadScaleIncrease.addEventListener('click', onIncreasePhoto);
+}
+
+function closePopup() {
+  uploadPhotoSetting.classList.add('hidden');
+  document.removeEventListener('click', onPopupEscPress);
+  // Удаляем слушателей с кнопок при закрытии popup
+  uploadScaleReduction.removeEventListener('click', onRedictionPhoto);
+  uploadScaleIncrease.removeEventListener('click', onIncreasePhoto);
+  onResetToDefault(uploadPhoto);
+}
+
+uploadPhoto.addEventListener('change', function () {
+  openPopup();
+});
+
+uploadCancel.addEventListener('click', function () {
+  closePopup();
+});
+
+function onRedictionPhoto() {
+  if (parseFloat(uploadScale.querySelector('.scale__control--value').value) > MINIMUM_SCALE) {
+    var newScale = (parseFloat(uploadScale.querySelector('.scale__control--value').value) - STEP_SCALE);
+    uploadScale.querySelector('.scale__control--value').value = newScale + '%';
+    uploadPreview.querySelector('img').style.transform = 'scale(' + (newScale / PERCENT_SCALE) + ')';
+  }
+}
+
+function onIncreasePhoto() {
+  if (parseFloat(uploadScale.querySelector('.scale__control--value').value) < MAXIMUM_SCALE) {
+    var newScale = (parseFloat(uploadScale.querySelector('.scale__control--value').value) + STEP_SCALE);
+    uploadScale.querySelector('.scale__control--value').value = newScale + '%';
+    uploadPreview.querySelector('img').style.transform = 'scale(' + (newScale / PERCENT_SCALE) + ')';
+  }
+}
