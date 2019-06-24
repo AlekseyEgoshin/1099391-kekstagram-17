@@ -121,53 +121,13 @@ var uploadFilterPhobos = document.querySelector('#effect-phobos');
 var uploadFilterHeat = document.querySelector('#effect-heat');
 var uploadFilterSlider = document.querySelector('.img-upload__effect-level');
 var uploadFilterSliderDot = uploadFilterSlider.querySelector('.effect-level__pin');
-var uploadFilterSliderLine = uploadFilterSlider.querySelector('.effect-level__line');
+// var uploadFilterSliderLine = uploadFilterSlider.querySelector('.effect-level__line');
 
 //  var uploadPin = document.querySelector('.effect-level__pin');
 
 function onPopupEscPress(evt) {
   if (evt.keyCode === ESC_KEY) {
     closePopup();
-  }
-}
-
-function onChangeSettings(evt) {
-  evt.preventDefault();
-
-  var uploadFilterSliderPosition = uploadFilterSliderDot.style.left;
-  var uploadFilterSliderLineWidth = uploadFilterSliderLine.style.width;
-
-  var pinOffsetLeft = evt.target.offsetLeft;
-
-  if (pinOffsetLeft < 0) {
-    pinOffsetLeft = 0;
-  }
-
-  var uploadFilterSliderDotPosition = parseFloat(getComputedStyle(uploadFilterSliderDot).left);
-
-  switch (name) {
-   case 'chrome':
-     console.log(uploadFilterSliderDotPosition / pinOffsetLeft);
-     uploadPriviewPhoto.style.filter = 'grayscale(' + (uploadFilterSliderDotPosition / pinOffsetLeft) + ')';
-     break;
-   case 'sepia':
-     console.log(uploadFilterSliderDotPosition / pinOffsetLeft);
-     uploadPriviewPhoto.style.filter = 'sepia(1)';
-     break;
-   case 'marvin':
-     console.log(uploadFilterSliderDotPosition / pinOffsetLeft);
-     uploadPriviewPhoto.style.filter = 'invert(100%)';
-     break;
-   case 'phobos':
-     console.log(uploadFilterSliderDotPosition / pinOffsetLeft);
-     uploadPriviewPhoto.style.filter = 'blur(3px)';
-     break;
-   case 'heat':
-     console.log(uploadFilterSliderDotPosition / pinOffsetLeft);
-     uploadPriviewPhoto.style.filter = 'brightness(3)';
-     break;
-   default:
-     break;
   }
 }
 
@@ -185,8 +145,8 @@ function selectFilter(evt) {
     uploadFilterSlider.classList.add('hidden');
   } else {
     // Выставляем значение ползунка на 100%
-    //uploadFilterSliderDot.style.left = '100%';
-    //uploadFilterSliderLine.style.width = '100%';
+    // uploadFilterSliderDot.style.left = '100%';
+    // uploadFilterSliderLine.style.width = '100%';
     uploadFilterSlider.classList.remove('hidden');
 
     var uploadFilterSliderDotPosition = parseFloat(getComputedStyle(uploadFilterSliderDot).left).toFixed(2);
@@ -208,8 +168,11 @@ function selectFilter(evt) {
         uploadPriviewPhoto.style.filter = 'blur(' + (uploadFilterSliderDotPosition / LINE_WIDTH) * 3 + 'px)';
         break;
       case 'heat':
-        var result = (uploadFilterSliderDotPosition / LINE_WIDTH) * 3;
-        (result < 1) ? result = 1 : result = result.toFixed(2);
+        var result = ((uploadFilterSliderDotPosition / LINE_WIDTH) * 3).toFixed(2);
+        if (result < 1) {
+          result = 1;
+        }
+
         uploadPriviewPhoto.style.filter = 'brightness(' + result + ')';
         break;
       default:
