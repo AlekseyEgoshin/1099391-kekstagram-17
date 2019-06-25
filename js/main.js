@@ -107,6 +107,8 @@ var uploadPreview = document.querySelector('.img-upload__preview');
 
 // Переменные для работы с увеличением/уменьшением картинки
 var uploadScale = document.querySelector('.img-upload__scale');
+var uploadPriviewImg = uploadPreview.querySelector('img');
+uploadPriviewImg.classList.add('resizing');
 var uploadScaleValue = uploadScale.querySelector('.scale__control--value');
 var uploadScaleReduction = uploadScale.querySelector('.scale__control--smaller');
 var uploadScaleIncrease = uploadScale.querySelector('.scale__control--bigger');
@@ -131,12 +133,6 @@ function onPopupEscPress(evt) {
   }
 }
 
-// Функция для сброса на начальное значение
-// Сделано именно функцией, потому что eslint ругался на выражение uploadPhoto.reset
-function onResetToDefault(func) {
-  return func.reset;
-}
-
 function selectFilter(evt) {
   // Проверяем, установлено ли свойство инпут в true у других инпутов, если есть - сбрасываем
   // Так как может быть только 1 установленный инпут, то и проверям, и сбрасываем только 1 элемент
@@ -151,33 +147,32 @@ function selectFilter(evt) {
 
     var uploadFilterSliderDotPosition = parseFloat(getComputedStyle(uploadFilterSliderDot).left).toFixed(2);
 
+    var value;
     switch (filterName) {
-      case 'none':
-        uploadPriviewPhoto.style.filter = 'none';
-        break;
       case 'chrome':
-        uploadPriviewPhoto.style.filter = 'grayscale(' + (uploadFilterSliderDotPosition / LINE_WIDTH) + ')';
+        value = 'grayscale(' + (uploadFilterSliderDotPosition / LINE_WIDTH).toFixed(3) + ')';
         break;
       case 'sepia':
-        uploadPriviewPhoto.style.filter = 'sepia(' + (uploadFilterSliderDotPosition / LINE_WIDTH) + ')';
+        value = 'sepia(' + (uploadFilterSliderDotPosition / LINE_WIDTH).toFixed(3) + ')';
         break;
       case 'marvin':
-        uploadPriviewPhoto.style.filter = 'invert(' + (uploadFilterSliderDotPosition / LINE_WIDTH) * 100 + '%)';
+        value = 'invert(' + ((uploadFilterSliderDotPosition / LINE_WIDTH) * 100).toFixed(3) + '%)';
         break;
       case 'phobos':
-        uploadPriviewPhoto.style.filter = 'blur(' + (uploadFilterSliderDotPosition / LINE_WIDTH) * 3 + 'px)';
+        value = 'blur(' + ((uploadFilterSliderDotPosition / LINE_WIDTH) * 3).toFixed(3) + 'px)';
         break;
       case 'heat':
-        var result = ((uploadFilterSliderDotPosition / LINE_WIDTH) * 3).toFixed(2);
+        var result = ((uploadFilterSliderDotPosition / LINE_WIDTH) * 3).toFixed(3);
         if (result < 1) {
           result = 1;
         }
-
-        uploadPriviewPhoto.style.filter = 'brightness(' + result + ')';
+        value = 'brightness(' + result + ')';
         break;
       default:
+        value = 'none';
         break;
     }
+    uploadPriviewPhoto.style.filter = value;
   }
 }
 
@@ -206,7 +201,7 @@ function closePopup() {
   // Удаляем слушателей с кнопок при закрытии popup
   uploadScaleReduction.removeEventListener('click', onRedictionPhoto);
   uploadScaleIncrease.removeEventListener('click', onIncreasePhoto);
-  onResetToDefault(uploadPhoto);
+  uploadPhoto.value = '';
 }
 
 uploadPhoto.addEventListener('change', openPopup);
@@ -217,7 +212,7 @@ function onRedictionPhoto() {
   if (parseFloat(uploadScaleValue.value) > MINIMUM_SCALE) {
     var newScale = (parseFloat(uploadScaleValue.value) - STEP_SCALE);
     uploadScaleValue.value = newScale + '%';
-    uploadPreview.querySelector('img').style.transform = 'scale(' + (newScale / PERCENT_SCALE) + ')';
+    uploadPreview.querySelector('.resizing').style.transform = 'scale(' + (newScale / PERCENT_SCALE) + ')';
   }
 }
 
@@ -225,6 +220,6 @@ function onIncreasePhoto() {
   if (parseFloat(uploadScaleValue.value) < MAXIMUM_SCALE) {
     var newScale = (parseFloat(uploadScaleValue.value) + STEP_SCALE);
     uploadScaleValue.value = newScale + '%';
-    uploadPreview.querySelector('img').style.transform = 'scale(' + (newScale / PERCENT_SCALE) + ')';
+    uploadPreview.querySelector('.resizing').style.transform = 'scale(' + (newScale / PERCENT_SCALE) + ')';
   }
 }
