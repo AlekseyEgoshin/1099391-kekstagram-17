@@ -120,10 +120,8 @@ var uploadFilterSlider = document.querySelector('.img-upload__effect-level');
 var uploadFilterSliderDot = uploadFilterSlider.querySelector('.effect-level__pin');
 // var uploadFilterSliderLine = uploadFilterSlider.querySelector('.effect-level__line');
 
-//  var uploadPin = document.querySelector('.effect-level__pin');
-
 function onPopupEscPress(evt) {
-  if (evt.keyCode === ESC_KEY) {
+  if (evt.keyCode === ESC_KEY && !evt.currentTarget.querySelector('.text__description:focus')) {
     closePopup();
   }
 }
