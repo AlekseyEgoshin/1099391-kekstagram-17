@@ -138,10 +138,6 @@ function onChangeEffect(evt) {
   }
 }
 
-function onCommentaryLentgh() {
-  return this.value.length < 140;
-}
-
 function selectFilter(filterName) {
   // Выставляем значение ползунка на 100%
   // uploadFilterSliderDot.style.left = '100%';
