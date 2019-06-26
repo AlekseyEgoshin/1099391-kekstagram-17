@@ -115,16 +115,31 @@ var uploadScaleIncrease = uploadScale.querySelector('.scale__control--bigger');
 
 // Переменные для работы с фильтрами
 var uploadPriviewPhoto = uploadPreview.querySelector('img');
+var listItem = document.querySelector('.effects__list');
 var uploadFilterSlider = document.querySelector('.img-upload__effect-level');
 var uploadFilterSliderDot = uploadFilterSlider.querySelector('.effect-level__pin');
 // var uploadFilterSliderLine = uploadFilterSlider.querySelector('.effect-level__line');
 
+// Переменные для работы с полями инпут
+var uploadCommentary = document.querySelector('.text__description');
+
 //  var uploadPin = document.querySelector('.effect-level__pin');
 
 function onPopupEscPress(evt) {
-  if (evt.keyCode === ESC_KEY) {
+  if (evt.keyCode === ESC_KEY && !evt.currentTarget.querySelector('.text__description:focus')) {
     closePopup();
   }
+}
+
+function onChangeEffect(evt) {
+  var target = evt.target;
+  if (target.name === 'effect') {
+    selectFilter(target.id);
+  }
+}
+
+function onCommentaryLentgh() {
+  return this.value.length < 140;
 }
 
 function selectFilter(filterName) {
@@ -135,20 +150,21 @@ function selectFilter(filterName) {
 
   var uploadFilterSliderDotPosition = parseFloat(getComputedStyle(uploadFilterSliderDot).left).toFixed(2);
   var value;
+
   switch (filterName) {
-    case 'effects__preview--chrome':
+    case 'effect-chrome':
       value = 'grayscale(' + (uploadFilterSliderDotPosition / LINE_WIDTH).toFixed(3) + ')';
       break;
-    case 'effects__preview--sepia':
+    case 'effect-sepia':
       value = 'sepia(' + (uploadFilterSliderDotPosition / LINE_WIDTH).toFixed(3) + ')';
       break;
-    case 'effects__preview--marvin':
+    case 'effect-marvin':
       value = 'invert(' + ((uploadFilterSliderDotPosition / LINE_WIDTH) * 100).toFixed(3) + '%)';
       break;
-    case 'effects__preview--phobos':
+    case 'effect-phobos':
       value = 'blur(' + ((uploadFilterSliderDotPosition / LINE_WIDTH) * 3).toFixed(3) + 'px)';
       break;
-    case 'effects__preview--heat':
+    case 'effect-heat':
       var result = ((uploadFilterSliderDotPosition / LINE_WIDTH) * 3).toFixed(3);
       if (result < 1) {
         result = 1;
@@ -160,8 +176,8 @@ function selectFilter(filterName) {
       value = 'none';
       break;
   }
-  uploadPriviewPhoto.style.filter = value;
 
+  uploadPriviewPhoto.style.filter = value;
 }
 
 function openPopup() {
@@ -174,13 +190,9 @@ function openPopup() {
   uploadScaleIncrease.addEventListener('click', onIncreasePhoto);
 
   uploadFilterSlider.classList.add('hidden');
-  var listItem = document.querySelector('.effects__list');
-  listItem.onclick = function (evt) {
-    var target = evt.target;
-    if (target.classList[0] === 'effects__preview') {
-      selectFilter(target.classList[1]);
-    }
-  };
+  listItem.addEventListener('click', onChangeEffect);
+
+  uploadCommentary.setAttribute('maxlength', '140');
 }
 
 function closePopup() {
@@ -189,6 +201,7 @@ function closePopup() {
   // Удаляем слушателей с кнопок при закрытии popup
   uploadScaleReduction.removeEventListener('click', onRedictionPhoto);
   uploadScaleIncrease.removeEventListener('click', onIncreasePhoto);
+  listItem.removeEventListener('click', onChangeEffect);
   uploadPhoto.value = '';
 }
 
