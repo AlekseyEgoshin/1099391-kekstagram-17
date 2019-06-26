@@ -187,8 +187,6 @@ function openPopup() {
 
   uploadFilterSlider.classList.add('hidden');
   listItem.addEventListener('click', onChangeEffect);
-
-  uploadCommentary.setAttribute('maxlength', '140');
 }
 
 function closePopup() {
