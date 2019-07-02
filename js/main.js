@@ -135,11 +135,6 @@ function onChangeEffect(evt) {
   }
 }
 
-function onSliderPreventDefault(evtPrvDef) {
-  evtPrvDef.preventDefault();
-  uploadFilterSliderDot.removeEventListener('click', onSliderPreventDefault);
-}
-
 function changeEffectsParametrs(val, filterName) {
 
   var uploadFilterSliderDotPosition = parseFloat(val).toFixed(2);
@@ -186,11 +181,8 @@ function selectFilter(filterName) {
     // Перемещение происходит только по оси X
     var startCoordX = evt.clientX;
 
-    var dragged = false;
-
     function onSliderMouseMove(moveEvt) {
       moveEvt.preventDefault();
-      dragged = true;
 
       var shift = startCoordX - moveEvt.clientX;
 
@@ -215,10 +207,6 @@ function selectFilter(filterName) {
 
       document.removeEventListener('mousemove', onSliderMouseMove);
       document.removeEventListener('mouseup', onSliderMouseUp);
-
-      if (dragged) {
-        uploadFilterSliderDot.addEventListener('click', onSliderPreventDefault);
-      }
     }
 
     document.addEventListener('mousemove', onSliderMouseMove);
