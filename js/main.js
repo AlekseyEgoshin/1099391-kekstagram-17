@@ -135,6 +135,11 @@ function onChangeEffect(evt) {
   }
 }
 
+function onSliderPreventDefault(evtPrvDef) {
+  evtPrvDef.preventDefault();
+  uploadFilterSliderDot.removeEventListener('click', onSliderPreventDefault);
+}
+
 function changeEffectsParametrs(val, filterName) {
 
   var uploadFilterSliderDotPosition = parseFloat(val).toFixed(2);
@@ -175,7 +180,7 @@ function selectFilter(filterName) {
   uploadFilterSliderLine.style.width = LINE_MAX_WIDTH + 'px';
   changeEffectsParametrs(LINE_MAX_WIDTH, filterName);
 
-  function onMouseDown(evt) {
+  function onSliderMouseDown(evt) {
     evt.preventDefault();
 
     // Перемещение происходит только по оси X
@@ -183,7 +188,7 @@ function selectFilter(filterName) {
 
     var dragged = false;
 
-    function onMouseMove(moveEvt) {
+    function onSliderMouseMove(moveEvt) {
       moveEvt.preventDefault();
       dragged = true;
 
@@ -205,23 +210,19 @@ function selectFilter(filterName) {
       uploadFilterSliderLine.style.width = valueLine + 'px';
     }
 
-    function onMouseUp(upEvt) {
+    function onSliderMouseUp(upEvt) {
       upEvt.preventDefault();
 
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', onSliderMouseMove);
+      document.removeEventListener('mouseup', onSliderMouseUp);
 
       if (dragged) {
-        var onClickPreventDefault = function (evtPrvDef) {
-          evtPrvDef.preventDefault();
-          uploadFilterSliderDot.removeEventListener('click', onClickPreventDefault);
-        };
-        uploadFilterSliderDot.addEventListener('click', onClickPreventDefault);
+        uploadFilterSliderDot.addEventListener('click', onSliderPreventDefault);
       }
     }
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', onSliderMouseMove);
+    document.addEventListener('mouseup', onSliderMouseUp);
   }
 
   if (filterName === 'effect-none') {
@@ -229,12 +230,12 @@ function selectFilter(filterName) {
   } else {
     uploadFilterSlider.classList.remove('hidden');
 
-    uploadFilterSliderDot.addEventListener('mousedown', onMouseDown);
+    uploadFilterSliderDot.addEventListener('mousedown', onSliderMouseDown);
 
     // Отписываемся от обработчика при переключении на новый, не текущий, эффект
     listItem.addEventListener('click', function (evt) {
       if (evt.target.name !== filterName) {
-        uploadFilterSliderDot.removeEventListener('mousedown', onMouseDown);
+        uploadFilterSliderDot.removeEventListener('mousedown', onSliderMouseDown);
       }
     }, {once: true});
 
