@@ -199,7 +199,6 @@ function selectFilter(filterName) {
 
       var valueDot = uploadFilterSliderDot.offsetLeft - shift;
       var valueLine = uploadFilterSliderLine.offsetWidth - shift;
-
       changeEffectsParametrs(valueDot, filterName);
       uploadFilterSliderDot.style.left = valueDot + 'px';
       uploadFilterSliderLine.style.width = valueLine + 'px';
