@@ -117,6 +117,7 @@ var uploadScaleIncrease = uploadScale.querySelector('.scale__control--bigger');
 // Переменные для работы с фильтрами
 var uploadPriviewPhoto = uploadPreview.querySelector('img');
 var listItem = document.querySelector('.effects__list');
+var uploadFileEffectNone = listItem.querySelector('#effect-none');
 var uploadFilterSlider = document.querySelector('.img-upload__effect-level');
 var uploadFilterSliderDot = uploadFilterSlider.querySelector('.effect-level__pin');
 var uploadFilterSliderLine = uploadFilterSlider.querySelector('.effect-level__depth');
@@ -242,6 +243,8 @@ function selectFilter(filterName) {
 
 function openPopup() {
   uploadPhotoSetting.classList.remove('hidden');
+  uploadFileEffectNone.checked = true;
+  uploadPriviewPhoto.style.filter = '';
   document.addEventListener('keydown', onPopupEscPress);
 
   // Присваиваем стандартное значение в 100% и накладываем на кнопки слушателей
@@ -260,7 +263,6 @@ function closePopup() {
   uploadScaleReduction.removeEventListener('click', onRedictionPhoto);
   uploadScaleIncrease.removeEventListener('click', onIncreasePhoto);
   listItem.removeEventListener('click', onChangeEffect);
-  uploadPhoto.value = '';
 }
 
 uploadPhoto.addEventListener('change', openPopup);
