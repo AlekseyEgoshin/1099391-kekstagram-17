@@ -169,6 +169,21 @@ function changeEffectsParametrs(val, filterName) {
   uploadPriviewPhoto.style.filter = value;
 }
 
+function calculateParametrs(shift, filterName) {
+  // Получаем значение из стилей и преобразуем в число
+  var left = parseFloat(uploadFilterSliderDot.style.left);
+
+  if ((left - shift) < LINE_MIN_WIDTH || (left - shift) > LINE_MAX_WIDTH) {
+    shift = 0;
+  }
+
+  var valueDot = uploadFilterSliderDot.offsetLeft - shift;
+  var valueLine = uploadFilterSliderLine.offsetWidth - shift;
+  changeEffectsParametrs(valueDot, filterName);
+  uploadFilterSliderDot.style.left = valueDot + 'px';
+  uploadFilterSliderLine.style.width = valueLine + 'px';
+}
+
 function selectFilter(filterName) {
   // Выставляем значение ползунка на 100%
   uploadFilterSliderDot.style.left = LINE_MAX_WIDTH + 'px';
@@ -188,18 +203,7 @@ function selectFilter(filterName) {
 
       startCoordX = moveEvt.clientX;
 
-      // Получаем значение из стилей и преобразуем в число
-      var left = parseFloat(uploadFilterSliderDot.style.left);
-
-      if ((left - shift) < LINE_MIN_WIDTH || (left - shift) > LINE_MAX_WIDTH) {
-        shift = 0;
-      }
-
-      var valueDot = uploadFilterSliderDot.offsetLeft - shift;
-      var valueLine = uploadFilterSliderLine.offsetWidth - shift;
-      changeEffectsParametrs(valueDot, filterName);
-      uploadFilterSliderDot.style.left = valueDot + 'px';
-      uploadFilterSliderLine.style.width = valueLine + 'px';
+      calculateParametrs(shift, filterName);
     }
 
     function onSliderMouseUp(upEvt) {
