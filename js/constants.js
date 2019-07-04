@@ -14,5 +14,5 @@
     LINE_MAX_WIDTH: 453,
 
     ESC_KEY: 27,
-  }
+  };
 })();

@@ -26,7 +26,7 @@
   }
 
   window.picture = {
-    getPhotos: function(expressions, names, min, max) {
+    getPhotos: function (expressions, names, min, max) {
       var photosData = [];
       for (var i = 0; i < window.constants.QUANTITY; i++) {
         photosData[i] = {};
@@ -39,7 +39,7 @@
     },
 
     // Функция для создания DOM-элемента
-    getPhoto: function(photo, parentElement) {
+    getPhoto: function (photo, parentElement) {
       // Определяем шаблон, в который будем записывать данные
       var photoElement = parentElement.content.querySelector('.picture').cloneNode(true);
 
@@ -49,5 +49,5 @@
 
       return photoElement;
     },
-  }
+  };
 })();

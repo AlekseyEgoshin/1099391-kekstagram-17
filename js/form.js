@@ -14,7 +14,6 @@
   // Переменные для работы с фильтрами
   var uploadPriviewPhoto = uploadPreview.querySelector('img');
   var listItem = document.querySelector('.effects__list');
-  var uploadFileEffectNone = listItem.querySelector('#effect-none');
   var uploadFilterSlider = document.querySelector('.img-upload__effect-level');
   var uploadFilterSliderDot = uploadFilterSlider.querySelector('.effect-level__pin');
   var uploadFilterSliderLine = uploadFilterSlider.querySelector('.effect-level__depth');
@@ -71,14 +70,14 @@
   }
 
   window.form = {
-    onDefaulSizePhoto: function() {
+    onDefaulSizePhoto: function () {
       // Присваиваем стандартное значение в 100% и накладываем на кнопки слушателей
       uploadScaleValue.value = '100%';
       uploadScaleReduction.addEventListener('click', window.form.onRedictionPhoto);
       uploadScaleIncrease.addEventListener('click', window.form.onIncreasePhoto);
     },
     // Увеличение/уменьшение картинок
-    onRedictionPhoto: function() {
+    onRedictionPhoto: function () {
       if (parseFloat(uploadScaleValue.value) > window.constants.MINIMUM_SCALE) {
         var newScale = (parseFloat(uploadScaleValue.value) - window.constants.STEP_SCALE);
         uploadScaleValue.value = newScale + '%';
@@ -86,7 +85,7 @@
       }
     },
 
-    onIncreasePhoto: function() {
+    onIncreasePhoto: function () {
       if (parseFloat(uploadScaleValue.value) < window.constants.MAXIMUM_SCALE) {
         var newScale = (parseFloat(uploadScaleValue.value) + window.constants.STEP_SCALE);
         uploadScaleValue.value = newScale + '%';
@@ -94,7 +93,7 @@
       }
     },
 
-    selectFilter: function(filterName) {
+    selectFilter: function (filterName) {
       // Выставляем значение ползунка на 100%
       uploadFilterSliderDot.style.left = window.constants.LINE_MAX_WIDTH + 'px';
       uploadFilterSliderLine.style.width = window.constants.LINE_MAX_WIDTH + 'px';
@@ -142,5 +141,5 @@
         }, {once: true});
       }
     },
-  }
+  };
 })();
