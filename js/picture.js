@@ -2,38 +2,26 @@
 
 // функция для отрисовки 1 изображения
 (function () {
-  // Функция для получения случайного числа исходя из длинны массива
-  function getIndex(length) {
-    return Math.floor(Math.random() * length);
-  }
-
-  // Функция для получения случайного числа из диапазона значений
-  function getRandomInt(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
   // Функция для получения комментариев к фотографии
-  function getCommentaries(expressions, names) {
-    var comments = [];
-    for (var j = 0; j < getIndex(window.constants.QUANTITY); j++) {
-      comments[j] = {};
-      comments[j].avatar = 'img/avatar-' + getRandomInt(1, 6) + '.svg';
-      comments[j].message = expressions[getIndex(expressions.length)];
-      comments[j].name = names[getIndex(names.length)];
+  function getCommentaries(comments) {
+    var commentaries = [];
+    for (var j = 0; j < comments.length; j++) {
+      commentaries[j] = {};
+      commentaries[j].avatar = comments[j].avatar;
+      commentaries[j].message = comments[j].message;
+      commentaries[j].name = comments[j].name;
     }
 
-    return comments;
+    return commentaries;
   }
 
   window.picture = {
-    getPhotos: function (expressions, names, min, max) {
-      var photosData = [];
-      for (var i = 0; i < window.constants.QUANTITY; i++) {
-        photosData[i] = {};
-        photosData[i].url = 'photos/' + (i + 1) + '.jpg';
-        photosData[i].likes = getRandomInt(min, max);
-        photosData[i].comments = getCommentaries(expressions, names);
-      }
+    // TODO : По заданнию добавить описание к фотографии с хэш-тегами 'description'
+    getPhotos: function (url, likes, comments) {
+      var photosData = {};
+      photosData.url = url;
+      photosData.likes = likes;
+      photosData.comments = getCommentaries(comments);
 
       return photosData;
     },

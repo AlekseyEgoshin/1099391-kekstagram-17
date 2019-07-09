@@ -3,17 +3,16 @@
 (function () {
 
   // функция для генерации всех фотографий
-  function getDomElements() {
-    var photo = window.picture.getPhotos(window.data.EXPRESSIONS, window.data.NAMES, window.constants.MINMIMUM_LIKES, window.constants.MAXIMUM_LIKES);
-    var photoTemplate = document.querySelector('#picture');
-    var fragment = document.createDocumentFragment();
+  window.gallery = {
+    getDomElements: function (element) {
+      // TODO : По заданнию добавить описание к фотографии с хэш-тегами 'element.description'
+      var photo = window.picture.getPhotos(element.url, element.likes, element.comments);
+      var photoTemplate = document.querySelector('#picture');
+      var fragment = document.createDocumentFragment();
 
-    for (var i = 0; i < window.constants.QUANTITY; i++) {
-      fragment.appendChild(window.picture.getPhoto(photo[i], photoTemplate));
+      fragment.appendChild(window.picture.getPhoto(photo, photoTemplate));
+
+      return fragment;
     }
-
-    return fragment;
-  }
-
-  document.querySelector('.pictures').appendChild(getDomElements());
+  };
 })();
