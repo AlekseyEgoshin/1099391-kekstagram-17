@@ -3,8 +3,6 @@
 (function () {
   window.constants = {
     QUANTITY: 25,
-    MINMIMUM_LIKES: 15,
-    MAXIMUM_LIKES: 100,
 
     MINIMUM_SCALE: 25,
     MAXIMUM_SCALE: 100,
@@ -14,5 +12,9 @@
     LINE_MAX_WIDTH: 453,
 
     ESC_KEY: 27,
+
+    SUCCESS_OK: 200,
+
+    READYSTATE_DONE: 4,
   };
 })();
