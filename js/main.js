@@ -34,7 +34,7 @@
           for (var i = 0; i < window.constants.PHOTOS_QUANTITY; i++) {
             var el = newData[i];
             document.querySelector('.pictures').appendChild(window.gallery.getDomElements(el));
-          };
+          }
           break;
         case 'filter-discussed':
           var discussData = window.filters.sort(data);
@@ -43,8 +43,8 @@
             document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
           });
           break;
-      };
-    };
+      }
+    }
 
     popularPhoto.addEventListener('click', setFilter);
     newPhoto.addEventListener('click', setFilter);

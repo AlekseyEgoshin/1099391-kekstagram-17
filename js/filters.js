@@ -8,12 +8,12 @@
         filterPhoto.classList.remove('img-filters--inactive');
 
         filterPhoto.querySelector('#filter-popular').addEventListener('click', window.filters.deletePictures);
-      };
+      }
     },
 
     sort: function (data) {
       var popularPhotos = data.slice().sort(function (prevPhoto, nextPhoto) {
-        return prevPhoto.comments.length < nextPhoto.comments.length ? 1 : -1 ;
+        return prevPhoto.comments.length < nextPhoto.comments.length ? 1 : -1;
       });
       return popularPhotos;
     },
