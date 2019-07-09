@@ -2,6 +2,55 @@
 
 (function () {
 
+  window.data.load(function (data) {
+    data.forEach(function (element) {
+      document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
+    });
+    window.filters.unlock();
+
+    // Переменные для работы с кнопками переключения окон
+    var filterPhoto = document.querySelector('.img-filters');
+    var popularPhoto = filterPhoto.querySelector('#filter-popular');
+    var newPhoto = filterPhoto.querySelector('#filter-new');
+    var discussedPhoto = filterPhoto.querySelector('#filter-discussed');
+
+    function setFilter(evt) {
+      window.filters.deletePictures();
+
+      var buttonHover = 'img-filters__button--active';
+      document.querySelector('.' + buttonHover).classList.remove(buttonHover);
+      document.querySelector('#' + evt.currentTarget.id).classList.add(buttonHover);
+
+      switch (evt.currentTarget.id) {
+        case 'filter-popular':
+          data.forEach(function (element) {
+            document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
+          });
+          break;
+        case 'filter-new':
+          var newData = data.slice().sort(function () {
+            return Math.random() - 0.5;
+          });
+          for (var i = 0; i < window.constants.PHOTOS_QUANTITY; i++) {
+            var el = newData[i];
+            document.querySelector('.pictures').appendChild(window.gallery.getDomElements(el));
+          };
+          break;
+        case 'filter-discussed':
+          var discussData = window.filters.sort(data);
+
+          discussData.forEach(function (element) {
+            document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
+          });
+          break;
+      };
+    };
+
+    popularPhoto.addEventListener('click', setFilter);
+    newPhoto.addEventListener('click', setFilter);
+    discussedPhoto.addEventListener('click', setFilter);
+  });
+
   var uploadPhoto = document.querySelector('#upload-file');
   var uploadPhotoSetting = document.querySelector('.img-upload__overlay');
   var uploadCancel = document.querySelector('#upload-cancel');

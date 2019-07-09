@@ -3,6 +3,7 @@
 (function () {
   window.constants = {
     QUANTITY: 25,
+    PHOTOS_QUANTITY: 10,
 
     MINIMUM_SCALE: 25,
     MAXIMUM_SCALE: 100,
