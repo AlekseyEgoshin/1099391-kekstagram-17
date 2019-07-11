@@ -11,7 +11,7 @@
     var pictures = document.querySelectorAll('.picture');
     pictures.forEach(function (photo) {
       photo.addEventListener('click', window.bigPicture.openBigPicture);
-    })
+    });
 
     // Переменные для работы с кнопками переключения окон
     var filterPhoto = document.querySelector('.img-filters');
