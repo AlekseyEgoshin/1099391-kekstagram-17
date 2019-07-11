@@ -8,6 +8,11 @@
     });
     window.filters.unlock();
 
+    var pictures = document.querySelectorAll('.picture');
+    pictures.forEach(function (photo) {
+      photo.addEventListener('click', window.bigPicture.openBigPicture);
+    })
+
     // Переменные для работы с кнопками переключения окон
     var filterPhoto = document.querySelector('.img-filters');
     var popularPhoto = filterPhoto.querySelector('#filter-popular');
@@ -82,14 +87,16 @@
   }
 
   function onPopupEscPress(evt) {
-    if (evt.keyCode === window.constants.ESC_KEY && !evt.currentTarget.querySelector('.text__description:focus')) {
+    if (evt.keyCode === window.constants.ESC_KEY
+      && !evt.currentTarget.querySelector('.text__description:focus')
+      && !evt.currentTarget.querySelector('.text__hashtags')) {
       closePopup();
     }
   }
 
   function closePopup() {
     uploadPhotoSetting.classList.add('hidden');
-    document.removeEventListener('click', onPopupEscPress);
+    document.removeEventListener('keydown', onPopupEscPress);
 
     // Удаляем слушателей с кнопок при закрытии popup
     var uploadScale = document.querySelector('.img-upload__scale');

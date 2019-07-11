@@ -5,8 +5,7 @@
   // функция для генерации всех фотографий
   window.gallery = {
     getDomElements: function (element) {
-      // TODO : По заданнию добавить описание к фотографии с хэш-тегами 'element.description'
-      var photo = window.picture.getPhotos(element.url, element.likes, element.comments);
+      var photo = window.picture.getPhotos(element.url, element.likes, element.comments, element.description);
       var photoTemplate = document.querySelector('#picture');
       var fragment = document.createDocumentFragment();
 

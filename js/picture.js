@@ -16,10 +16,10 @@
   }
 
   window.picture = {
-    // TODO : По заданнию добавить описание к фотографии с хэш-тегами 'description'
-    getPhotos: function (url, likes, comments) {
+    getPhotos: function (url, likes, comments, description) {
       var photosData = {};
       photosData.url = url;
+      photosData.description = description;
       photosData.likes = likes;
       photosData.comments = getCommentaries(comments);
 
@@ -31,7 +31,10 @@
       // Определяем шаблон, в который будем записывать данные
       var photoElement = parentElement.content.querySelector('.picture').cloneNode(true);
 
+      photoElement.href = photo.url;
       photoElement.querySelector('.picture__img').src = photo.url;
+      photoElement.querySelector('.picture__img').dataset.adr = photo.url;
+      photoElement.querySelector('.picture__img').alt = photo.description;
       photoElement.querySelector('.picture__likes').textContent = photo.likes;
       photoElement.querySelector('.picture__comments').textContent = photo.comments.length;
 

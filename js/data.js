@@ -21,6 +21,8 @@
         }
       });
     },
-    photos: photos,
+    getPhotos: function () {
+      return photos;
+    }
   };
 })();
