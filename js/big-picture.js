@@ -20,7 +20,7 @@
     bigPicture.classList.add('hidden');
 
     var cancelButton = document.querySelector('.big-picture__cancel');
-    cancelButton.addEventListener('click', closeBigPicture);
+    cancelButton.removeEventListener('click', closeBigPicture);
 
     document.removeEventListener('keydown', onPopupEscPress);
   }

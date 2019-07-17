@@ -2,6 +2,8 @@
 
 (function () {
   window.constants = {
+    DEBOUNCE_INTERVAL: 500,
+
     QUANTITY: 25,
     PHOTOS_QUANTITY: 10,
 

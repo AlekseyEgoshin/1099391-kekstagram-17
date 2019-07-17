@@ -2,6 +2,17 @@
 
 (function () {
 
+  var uploadPhoto = document.querySelector('#upload-file');
+  var uploadPhotoSetting = document.querySelector('.img-upload__overlay');
+  var uploadCancel = document.querySelector('#upload-cancel');
+  var uploadPreview = document.querySelector('.img-upload__preview');
+
+  // // Переменные для работы с фильтрами
+  var uploadPreviewPhoto = uploadPreview.querySelector('img');
+  var listItem = document.querySelector('.effects__list');
+  var uploadFileEffectNone = listItem.querySelector('#effect-none');
+  var uploadFilterSlider = document.querySelector('.img-upload__effect-level');
+
   window.data.load(function (data) {
     data.forEach(function (element) {
       document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
@@ -20,33 +31,47 @@
     var discussedPhoto = filterPhoto.querySelector('#filter-discussed');
 
     function setFilter(evt) {
-      window.filters.deletePictures();
 
       var buttonHover = 'img-filters__button--active';
       document.querySelector('.' + buttonHover).classList.remove(buttonHover);
       document.querySelector('#' + evt.currentTarget.id).classList.add(buttonHover);
+      // TODO: добить задачу с исключением дребезга!
+      function filterPop() {
+        window.filters.deletePictures();
+        data.forEach(function (element) {
+          document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
+        });
+      };
+
+      function filterNew() {
+        window.filters.deletePictures();
+        var newData = data.slice().sort(function () {
+          return Math.random() - 0.5;
+        });
+        for (var i = 0; i < window.constants.PHOTOS_QUANTITY; i++) {
+          var el = newData[i];
+          document.querySelector('.pictures').appendChild(window.gallery.getDomElements(el));
+        }
+      };
+
+      function filterDisc() {
+        window.filters.deletePictures();
+        var discussData = window.filters.sort(data);
+
+        discussData.forEach(function (element) {
+          document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
+        });
+      };
 
       switch (evt.currentTarget.id) {
         case 'filter-popular':
-          data.forEach(function (element) {
-            document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
-          });
+          window.utils.debounce(filterPop);
           break;
         case 'filter-new':
-          var newData = data.slice().sort(function () {
-            return Math.random() - 0.5;
-          });
-          for (var i = 0; i < window.constants.PHOTOS_QUANTITY; i++) {
-            var el = newData[i];
-            document.querySelector('.pictures').appendChild(window.gallery.getDomElements(el));
-          }
+          window.utils.debounce(filterNew);
           break;
         case 'filter-discussed':
-          var discussData = window.filters.sort(data);
-
-          discussData.forEach(function (element) {
-            document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
-          });
+          window.utils.debounce(filterDisc);
           break;
       }
     }
@@ -55,17 +80,6 @@
     newPhoto.addEventListener('click', setFilter);
     discussedPhoto.addEventListener('click', setFilter);
   });
-
-  var uploadPhoto = document.querySelector('#upload-file');
-  var uploadPhotoSetting = document.querySelector('.img-upload__overlay');
-  var uploadCancel = document.querySelector('#upload-cancel');
-  var uploadPreview = document.querySelector('.img-upload__preview');
-
-  // // Переменные для работы с фильтрами
-  var uploadPreviewPhoto = uploadPreview.querySelector('img');
-  var listItem = document.querySelector('.effects__list');
-  var uploadFileEffectNone = listItem.querySelector('#effect-none');
-  var uploadFilterSlider = document.querySelector('.img-upload__effect-level');
 
   function onChangeEffect(evt) {
     var target = evt.target;
