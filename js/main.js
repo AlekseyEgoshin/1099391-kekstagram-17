@@ -41,7 +41,7 @@
         data.forEach(function (element) {
           document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
         });
-      };
+      }
 
       function filterNew() {
         window.filters.deletePictures();
@@ -52,7 +52,7 @@
           var el = newData[i];
           document.querySelector('.pictures').appendChild(window.gallery.getDomElements(el));
         }
-      };
+      }
 
       function filterDisc() {
         window.filters.deletePictures();
@@ -61,7 +61,7 @@
         discussData.forEach(function (element) {
           document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
         });
-      };
+      }
 
       switch (evt.currentTarget.id) {
         case 'filter-popular':
