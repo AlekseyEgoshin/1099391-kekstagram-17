@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  var asd = document.querySelector('.pictures');
+  var gallery = document.querySelector('.pictures');
 
   function deletePictures() {
     var childs = document.querySelectorAll('.picture');
@@ -10,10 +10,17 @@
     }
   }
 
+  function sort(data) {
+    var popularPhotos = data.slice().sort(function (prevPhoto, nextPhoto) {
+      return prevPhoto.comments.length < nextPhoto.comments.length ? 1 : -1;
+    });
+    return popularPhotos;
+  }
+
   function filterPop(data) {
     deletePictures();
     data.forEach(function (element) {
-      asd.appendChild(window.gallery.getDomElements(element));
+      gallery.appendChild(window.gallery.get(element));
     });
   }
 
@@ -23,17 +30,17 @@
       return Math.random() - 0.5;
     });
     for (var i = 0; i < window.constants.PHOTOS_QUANTITY; i++) {
-      var el = newData[i];
-      asd.appendChild(window.gallery.getDomElements(el));
+      var photo = newData[i];
+      gallery.appendChild(window.gallery.get(photo));
     }
   }
 
   function filterDisc(data) {
     deletePictures();
-    var discussData = window.filters.sort(data);
+    var discussData = sort(data);
 
     discussData.forEach(function (element) {
-      asd.appendChild(window.gallery.getDomElements(element));
+      gallery.appendChild(window.gallery.get(element));
     });
   }
 
@@ -46,28 +53,34 @@
     },
 
     set: function (evt, data) {
+      var target = evt.target;
+
+      if (!target.classList.contains('img-filters__button')) {
+        return false;
+      }
+
       var buttonHoverClassName = 'img-filters__button--active';
       document.querySelector('.' + buttonHoverClassName).classList.remove(buttonHoverClassName);
-      document.querySelector('#' + evt.target.id).classList.add(buttonHoverClassName);
+      document.querySelector('#' + target.id).classList.add(buttonHoverClassName);
 
-      switch (evt.target.id) {
+      switch (target.id) {
         case 'filter-popular':
-          window.utils.debounce(filterPop(data));
+          window.utils.debounce(function () {
+            filterPop(data);
+          });
           break;
         case 'filter-new':
-          window.utils.debounce(filterNew(data));
+          window.utils.debounce(function () {
+            filterNew(data);
+          });
           break;
         case 'filter-discussed':
-          window.utils.debounce(filterDisc(data));
+          window.utils.debounce(function () {
+            filterDisc(data);
+          });
           break;
       }
-    },
-
-    sort: function (data) {
-      var popularPhotos = data.slice().sort(function (prevPhoto, nextPhoto) {
-        return prevPhoto.comments.length < nextPhoto.comments.length ? 1 : -1;
-      });
-      return popularPhotos;
+      return true;
     },
   };
 })();

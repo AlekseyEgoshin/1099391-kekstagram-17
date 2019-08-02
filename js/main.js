@@ -14,16 +14,27 @@
   var uploadFileEffectNone = listItem.querySelector('#effect-none');
   var uploadFilterSlider = document.querySelector('.img-upload__effect-level');
 
+  var uploadForm = document.querySelector('.img-upload__form');
+  var uploadInput = uploadForm.querySelector('.img-upload__input');
+
+  uploadInput.addEventListener('input', window.preview.onChangePhoto);
+
+  var main = document.querySelector('main');
+  main.classList.add('root');
+
+  window.utils.load();
+
   // Функция для работы с кнопками фильтрации изображения
   window.data.load(function (data) {
     data.forEach(function (element) {
-      document.querySelector('.pictures').appendChild(window.gallery.getDomElements(element));
+      document.querySelector('.pictures').appendChild(window.gallery.get(element));
     });
     window.filters.unlock();
 
-    var pictures = document.querySelectorAll('.picture');
-    pictures.forEach(function (photo) {
-      photo.addEventListener('click', window.bigPicture.openBigPicture);
+    var pictures = document.querySelector('.pictures');
+    pictures.addEventListener('click', window.bigPicture.open);
+    pictures.addEventListener('keydown', function (evt) {
+      window.bigPicture.open(evt);
     });
 
     // Переменные для работы с кнопками переключения окон
@@ -42,19 +53,15 @@
     }
   }
 
-  function onPopupEscPress(evt) {
-    if (evt.keyCode === window.constants.ESC_KEY
-      && !evt.currentTarget.querySelector('.text__description:focus')
-      && !evt.currentTarget.querySelector('.text__hashtags')) {
-      closePopup();
-    }
+  function esc(evt) {
+    window.utils.escPress(evt, closePopup);
   }
 
   function openPopup() {
     uploadPhotoSetting.classList.remove('hidden');
     uploadFileEffectNone.checked = true;
     uploadPreviewPhoto.style.filter = '';
-    document.addEventListener('keydown', onPopupEscPress);
+    document.addEventListener('keydown', esc);
 
     window.form.onDefaulSizePhoto();
 
@@ -62,58 +69,32 @@
     listItem.addEventListener('click', onChangeEffect);
 
     // Вешаем обработчик на строку с хеш-тегами
-    uploadHastTags.addEventListener('change', function (evt) {
-      var currentValue = evt.target.value;
-      if (currentValue) {
-        var checkedTags = [];
-        var hashTags = [];
-        hashTags = currentValue.split(' ');
-        // console.log(hashTags);
-        var element = '#';
-        // Проверяем длинну "слова" и наличие "#"
-        for (var i = 0; i < hashTags.length; i++) {
-          if (hashTags[i].indexOf(element) === 0) {
-            // console.log(hashTags[i].length);
-            // console.log(hashTags[i].toLowerCase());
+    uploadHastTags.addEventListener('blur', window.bigPicture.hashTags);
 
-            // Делаем проверку на существование похожего хеш-тега
-            if (i === 0) {
-              // console.log(3 + ' serv');
-              checkedTags.push(hashTags[i]);
-            } else {
-              // console.log(checkedTags.indexOf(hashTags[i]));
-              // console.log(checkedTags.indexOf(hashTags[i]) === -1);
-              if (checkedTags.indexOf(hashTags[i]) === -1) {
-                // console.log(4 + ' serv');
-                checkedTags.push(hashTags[i]);
-              } else {
-                // console.log(5 + ' Есть похожий элемент');
-                // Сообщение об ошибке
-              }
-            }
-          } else {
-            // console.log(0 + ' # не стоит на 1 месте');
-          }
-        }
-
-      }
-
+    // Обработчик на кнопку "ОТПРАВИТЬ"
+    uploadForm.addEventListener('submit', function (evt) {
+      window.data.send(new FormData(uploadForm), window.utils.status);
+      evt.preventDefault();
+      closePopup();
     });
   }
 
   function closePopup() {
     uploadPhotoSetting.classList.add('hidden');
-    document.removeEventListener('keydown', onPopupEscPress);
+    document.removeEventListener('keydown', esc);
 
     // Удаляем слушателей с кнопок при закрытии popup
     var uploadScale = document.querySelector('.img-upload__scale');
-    var uploadScaleReduction = uploadScale.querySelector('.scale__control--smaller');
-    var uploadScaleIncrease = uploadScale.querySelector('.scale__control--bigger');
 
-    uploadScaleReduction.removeEventListener('click', window.form.onRedictionPhoto);
-    uploadScaleIncrease.removeEventListener('click', window.form.onIncreasePhoto);
+    uploadScale.removeEventListener('click', window.form.onChangeSize);
     listItem.removeEventListener('click', onChangeEffect);
   }
+
   uploadPhoto.addEventListener('change', openPopup);
   uploadCancel.addEventListener('click', closePopup);
+  uploadCancel.addEventListener('keydown', function (evt) {
+    if (evt.keyCode === window.constants.ENTER_KEY) {
+      closePopup();
+    }
+  });
 })();

@@ -8,8 +8,6 @@
   var uploadPriviewImg = uploadPreview.querySelector('img');
   uploadPriviewImg.classList.add('resizing');
   var uploadScaleValue = uploadScale.querySelector('.scale__control--value');
-  var uploadScaleReduction = uploadScale.querySelector('.scale__control--smaller');
-  var uploadScaleIncrease = uploadScale.querySelector('.scale__control--bigger');
 
   // Переменные для работы с фильтрами
   var uploadPriviewPhoto = uploadPreview.querySelector('img');
@@ -73,21 +71,24 @@
     onDefaulSizePhoto: function () {
       // Присваиваем стандартное значение в 100% и накладываем на кнопки слушателей
       uploadScaleValue.value = '100%';
-      uploadScaleReduction.addEventListener('click', window.form.onRedictionPhoto);
-      uploadScaleIncrease.addEventListener('click', window.form.onIncreasePhoto);
-    },
-    // Увеличение/уменьшение картинок
-    onRedictionPhoto: function () {
-      if (parseFloat(uploadScaleValue.value) > window.constants.MINIMUM_SCALE) {
-        var newScale = (parseFloat(uploadScaleValue.value) - window.constants.STEP_SCALE);
-        uploadScaleValue.value = newScale + '%';
-        uploadPreview.querySelector('.resizing').style.transform = 'scale(' + (newScale / window.constants.PERCENT_SCALE) + ')';
-      }
+      uploadScale.addEventListener('click', window.form.onChangeSize);
     },
 
-    onIncreasePhoto: function () {
-      if (parseFloat(uploadScaleValue.value) < window.constants.MAXIMUM_SCALE) {
-        var newScale = (parseFloat(uploadScaleValue.value) + window.constants.STEP_SCALE);
+    // Увеличение/уменьшение картинок
+    onChangeSize: function (evt) {
+      var newScale;
+
+      if (evt.target.classList.contains('scale__control--smaller')) {
+        if (parseFloat(uploadScaleValue.value) > window.constants.MINIMUM_SCALE) {
+          newScale = (parseFloat(uploadScaleValue.value) - window.constants.STEP_SCALE);
+        }
+      } else if (evt.target.classList.contains('scale__control--bigger')) {
+        if (parseFloat(uploadScaleValue.value) < window.constants.MAXIMUM_SCALE) {
+          newScale = (parseFloat(uploadScaleValue.value) + window.constants.STEP_SCALE);
+        }
+      }
+
+      if (newScale) {
         uploadScaleValue.value = newScale + '%';
         uploadPreview.querySelector('.resizing').style.transform = 'scale(' + (newScale / window.constants.PERCENT_SCALE) + ')';
       }
@@ -109,9 +110,7 @@
           moveEvt.preventDefault();
 
           var shift = startCoordX - moveEvt.clientX;
-
           startCoordX = moveEvt.clientX;
-
           calculateParametrs(shift, filterName);
         }
 
@@ -130,7 +129,6 @@
         uploadFilterSlider.classList.add('hidden');
       } else {
         uploadFilterSlider.classList.remove('hidden');
-
         uploadFilterSliderDot.addEventListener('mousedown', onSliderMouseDown);
 
         // Отписываемся от обработчика при переключении на новый, не текущий, эффект
