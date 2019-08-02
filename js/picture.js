@@ -16,7 +16,7 @@
   }
 
   window.picture = {
-    photos: function (url, likes, comments, description) {
+    createPhoto: function (url, likes, comments, description) {
       var photosData = {};
       photosData.url = url;
       photosData.description = description;

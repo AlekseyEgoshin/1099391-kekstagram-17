@@ -58,7 +58,7 @@
   }
 
   window.bigPicture = {
-    open: function (evt) {
+    onBigPictureOpen: function (evt) {
       function onCommentsClick() {
         var commentaryCount = document.querySelector('.social__comment-count').innerHTML;
         var commentaryPhrases = commentaryCount.split(' ');
@@ -138,7 +138,7 @@
       }
     },
 
-    hashTags: function (evt) {
+    onHashtagsCheck: function (evt) {
       var currentValue = evt.target.value;
       // Проверяется, изменена ли была строка
       if (currentValue) {

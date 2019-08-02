@@ -32,9 +32,9 @@
     window.filters.unlock();
 
     var pictures = document.querySelector('.pictures');
-    pictures.addEventListener('click', window.bigPicture.open);
+    pictures.addEventListener('click', window.bigPicture.onBigPictureOpen);
     pictures.addEventListener('keydown', function (evt) {
-      window.bigPicture.open(evt);
+      window.bigPicture.onBigPictureOpen(evt);
     });
 
     // Переменные для работы с кнопками переключения окон
@@ -53,15 +53,15 @@
     }
   }
 
-  function esc(evt) {
-    window.utils.escPress(evt, closePopup);
+  function onEscape(evt) {
+    window.utils.escPress(evt, onPopupClose);
   }
 
-  function openPopup() {
+  function onPopupOpen() {
     uploadPhotoSetting.classList.remove('hidden');
     uploadFileEffectNone.checked = true;
     uploadPreviewPhoto.style.filter = '';
-    document.addEventListener('keydown', esc);
+    document.addEventListener('keydown', onEscape);
 
     window.form.onDefaulSizePhoto();
 
@@ -69,19 +69,19 @@
     listItem.addEventListener('click', onChangeEffect);
 
     // Вешаем обработчик на строку с хеш-тегами
-    uploadHastTags.addEventListener('blur', window.bigPicture.hashTags);
+    uploadHastTags.addEventListener('blur', window.bigPicture.onHashtagsCheck);
 
     // Обработчик на кнопку "ОТПРАВИТЬ"
     uploadForm.addEventListener('submit', function (evt) {
       window.data.send(new FormData(uploadForm), window.utils.status);
       evt.preventDefault();
-      closePopup();
+      onPopupClose();
     });
   }
 
-  function closePopup() {
+  function onPopupClose() {
     uploadPhotoSetting.classList.add('hidden');
-    document.removeEventListener('keydown', esc);
+    document.removeEventListener('keydown', onEscape);
 
     // Удаляем слушателей с кнопок при закрытии popup
     var uploadScale = document.querySelector('.img-upload__scale');
@@ -90,11 +90,11 @@
     listItem.removeEventListener('click', onChangeEffect);
   }
 
-  uploadPhoto.addEventListener('change', openPopup);
-  uploadCancel.addEventListener('click', closePopup);
+  uploadPhoto.addEventListener('change', onPopupOpen);
+  uploadCancel.addEventListener('click', onPopupClose);
   uploadCancel.addEventListener('keydown', function (evt) {
     if (evt.keyCode === window.constants.ENTER_KEY) {
-      closePopup();
+      onPopupClose();
     }
   });
 })();

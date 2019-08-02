@@ -5,7 +5,7 @@
   // функция для генерации всех фотографий
   window.gallery = {
     get: function (element) {
-      var photo = window.picture.photos(element.url, element.likes, element.comments, element.description);
+      var photo = window.picture.createPhoto(element.url, element.likes, element.comments, element.description);
       var photoTemplate = document.querySelector('#picture');
       var fragment = document.createDocumentFragment();
 
